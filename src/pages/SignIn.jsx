@@ -24,8 +24,8 @@ export default function SignIn() {
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img src={sign} alt="sign-in" className="w-full rounded-2xl" />
         </div>
-        <div>
-          <form className="w-full md:w-[67%] lg:w-[100%] lg:ml-20">
+        <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
+          <form>
             <input
               className="mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-400 rounded transition ease-in-out"
               type="email"
@@ -74,14 +74,15 @@ export default function SignIn() {
                 </Link>
               </p>
             </div>
+            <button
+              className="w-full bg-blue-600 text-white px-7 py-4 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-200 ease-in-out hover:shadow-xl active:bg-blue-900"
+              type="submit"
+            >
+              Sign in
+            </button>
           </form>
-          <button
-            className="w-full bg-blue-600 text-white px-7 py-4 lg:ml-20 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-200 ease-in-out hover:shadow-xl active:bg-blue-900"
-            type="submit"
-          >
-            Sign in
-          </button>
-          <div className="w-full flex items-center lg:ml-20 my-4 before:border-t  before:flex-1  before:border-gray-300 after:border-t  after:flex-1  after:border-gray-300">
+
+          <div className="w-full flex items-center my-4 before:border-t  before:flex-1  before:border-gray-300 after:border-t  after:flex-1  after:border-gray-300">
             <p className=" text-center font-semibold mx-4">OR</p>
           </div>
           <OAuth />

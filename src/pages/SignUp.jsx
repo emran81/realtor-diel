@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 import sign from "../sign-z.jpg";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +20,7 @@ export default function SignUp() {
     email: "",
     password: "",
   });
+
   const { name, email, password } = formData;
   function onChange(e) {
     setFormData((prevState) => ({
@@ -18,15 +28,38 @@ export default function SignUp() {
       [e.target.id]: e.target.value,
     }));
   }
+  const navigate = useNavigate();
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      updateProfile(auth.currentUser, { displayName: name });
+      const user = userCredential.user;
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timesStamp = serverTimestamp();
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      toast.success("Sign up was successful");
+      navigate("/");
+    } catch (error) {
+      toast.error("Something is went wrong with the registration ");
+    }
+  }
   return (
     <section>
       <h1 className="text-3xl text-center font-bold mt-6 ">Sign Up</h1>
       <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
-        <div className="md:w-[67%] lg:w-[45%] mb-12 md:mb-6">
+        <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img src={sign} alt="sign-in" className="w-full rounded-2xl" />
         </div>
-        <div>
-          <form className="w-full md:w-[67%] lg:w-[100%] lg:ml-20">
+        <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
+          <form onSubmit={onSubmit}>
             <input
               className="mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-400 rounded transition ease-in-out"
               type="text"
@@ -83,14 +116,15 @@ export default function SignUp() {
                 </Link>
               </p>
             </div>
+            <button
+              className="w-full bg-blue-600 text-white px-7 py-4 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-200 ease-in-out hover:shadow-xl active:bg-blue-900"
+              type="submit"
+            >
+              Sign up
+            </button>
           </form>
-          <button
-            className="w-full bg-blue-600 text-white px-7 py-4 lg:ml-20 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-200 ease-in-out hover:shadow-xl active:bg-blue-900"
-            type="submit"
-          >
-            Sign up
-          </button>
-          <div className="w-full flex items-center lg:ml-20 my-4 before:border-t  before:flex-1  before:border-gray-300 after:border-t  after:flex-1  after:border-gray-300">
+
+          <div className="w-full flex items-center my-4 before:border-t  before:flex-1  before:border-gray-300 after:border-t  after:flex-1  after:border-gray-300">
             <p className=" text-center font-semibold mx-4">OR</p>
           </div>
           <OAuth />
