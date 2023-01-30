@@ -31,7 +31,7 @@ export default function SignIn() {
         password
       );
       if (userCredential.user) {
-        navigate("/offers");
+        navigate("/");
       }
     } catch (error) {
       toast.error("Email or Password not match");
