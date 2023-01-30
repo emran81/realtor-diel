@@ -23,7 +23,7 @@ export default function Header() {
     }
   }
   return (
-    <div className="bg-white border-b shadow-sm sticky py-2 top-0 z-50">
+    <div className="bg-white border-b shadow-sm sticky py-2 top-0 z-40">
       <header className="flex justify-between items-center px-10 max-w-6xl mx-auto">
         <div>
           <img
